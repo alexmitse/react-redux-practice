@@ -1,4 +1,4 @@
-import { CREATE_POST, FETCH_POST, SHOW_LOADER, HIDE_LOADER } from "./types";
+import { CREATE_POST, FETCH_POST, SHOW_LOADER, HIDE_LOADER, SHOW_ALERT, HIDE_ALERT, REQUEST_POSTS } from "./types";
 
 export function createPost(post) {
   return {
@@ -15,15 +15,39 @@ export function hideLoader() {
   return {type:HIDE_LOADER}
 }
 
-export function fetchPosts() {
-  return async dispatch => {
-    dispatch(showLoader());
-    const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
-    const json = await response.json();
+export function showAlert(text) {
+  return dispatch => {
+    dispatch({
+      type:SHOW_ALERT,
+      payload: text
+    });
+
     setTimeout(()=>{
-      dispatch({type: FETCH_POST, payload: json})
-      dispatch(hideLoader());
-    },2000)
-  
+      dispatch(hideAlert());
+    }, 3000);
   }
+}
+
+export function hideAlert() {
+  return {type:HIDE_ALERT}
+}
+
+export function fetchPosts() {
+  return {
+    type: REQUEST_POSTS
+  }
+  // return async dispatch => {
+  //   try {
+  //     dispatch(showLoader());
+  //     const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
+  //     const json = await response.json();
+  //     setTimeout(()=>{
+  //       dispatch({type: FETCH_POST, payload: json})
+  //       dispatch(hideLoader());
+  //     },500);
+  //   } catch (error) {
+  //     dispatch(showAlert('Something went wrong'));
+  //     dispatch(hideLoader());
+  //   }
+  // }
 }
